@@ -40,36 +40,73 @@
         <tbody id="schedule"></tbody>
     </table>
     <p id="total-distance" style="font-weight: bold;"></p>
+    <img src="./www/sargassum.png" alt="Image Description">
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script>
         // Initialize the map
         const map = L.map('map').setView([24.15, -110.3], 8);
 
-        // Add OpenStreetMap tiles
-        const baseLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        // Define the default tile layer (OpenStreetMap)
+        const osmLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '© OpenStreetMap'
+        });
+
+        // Define the satellite tile layer (Esri)
+        const satelliteLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
             maxZoom: 18,
-            attribution: '© OpenStreetMap contributors'
-        }).addTo(map);
+            attribution: 'Tiles © Esri'
+        });
+
+        // Create a layer control to switch between layers
+        const baseMaps = {
+            "OpenStreetMap": osmLayer,
+            "Satellite": satelliteLayer
+        };
+
+        // Add the default layer to the map
+        osmLayer.addTo(map);
+
+        // Add the layer control to the map
+        L.control.layers(baseMaps).addTo(map);
+
+        // Ensure only one layer is visible at a time
+        map.on('overlayadd', function(e) {
+            if (e.layer === satelliteLayer) {
+                map.removeLayer(osmLayer);
+            }
+        });
+
+        map.on('overlayremove', function(e) {
+            if (e.layer === satelliteLayer) {
+                map.addLayer(osmLayer);
+            }
+        });
+
+        // Optionally, you can use a satellite layer from Mapbox
+        // L.tileLayer('https://api.mapbox.com/styles/v1/{username}/{style_id}/tiles/{z}/{x}/{y}?access_token={your_access_token}', {
+        //     maxZoom: 18,
+        //     attribution: '© Mapbox © OpenStreetMap'
+        // }).addTo(map);
 
         // Define expedition locations
         const locations = [
-            { name: "La Paz", lat: 24.1500, lng: -110.3000, date: "Day 1" },
-            { name: "Isla San José", lat: 24.9589, lng: -110.6222, date: "Day 2-3" },
-            { name: "Corredor", lat: 25.4181, lng: -110.9062, date: "Day 4" },
-            { name: "Loreto", lat: 26.0118, lng: -111.3436, date: "Day 5-6" },
-            { name: "San Basilio", lat: 26.5294, lng: -111.4044, date: "Day 7" },
-            { name: "Bahía Concepción", lat: 26.6979, lng: -111.8124, date: "Day 8-9" },
-            { name: "Santa Rosalia", lat: 27.3400, lng: -112.2600, date: "Day 10-11" },
-            { name: "Isla Tortuga", lat: 27.4833, lng: -111.9333, date: "Day 13" },
-            { name: "San Basilio (Return)", lat: 26.5294, lng: -111.4044, date: "Day 14" },
-            { name: "Loreto (Return)", lat: 26.0118, lng: -111.3436, date: "Day 15" },
-            { name: "Corredor (Return)", lat: 25.4181, lng: -110.9062, date: "Day 16" },
-            { name: "Isla San José (Return)", lat: 24.9589, lng: -110.6222, date: "Day 17" },
-            { name: "Punta Cosme", lat: 24.3210, lng: -110.5090, date: "Day 18" },
-            { name: "San Juan de la Costa", lat: 24.4050, lng: -110.4790, date: "Day 19" },
-            { name: "La Paz (Final)", lat: 24.1500, lng: -110.3000, date: "Day 20" }
+            { name: "La Paz", lat: 24.1500, lng: -110.3000, day: "Day 1", date: "19-04-2025" },
+            { name: "Isla San José", lat: 24.9589, lng: -110.6222, day: "Day 2-3", date: "20-04-2025 / 21-04-2025" },
+            { name: "Corredor", lat: 25.4181, lng: -110.9062, day: "Day 4", date: "22-04-2024" },
+            { name: "Loreto", lat: 26.0118, lng: -111.3436, day: "Day 5-6", date: "23-04-2024 / 24-04-2024" },
+            { name: "San Basilio", lat: 26.5294, lng: -111.4044, day: "Day 7", date: "25-04-2024" },
+            { name: "Bahía Concepción", lat: 26.6979, lng: -111.8124, day: "Day 8-9", date: "26-04-2024 / 27-04-2024" },
+            { name: "Santa Rosalia", lat: 27.3400, lng: -112.2600, day: "Day 10-11", date: "28-04-2024 / 29-04-2024" },
+            { name: "Isla Tortuga", lat: 27.4833, lng: -111.9333, day: "Day 13", date: "30-04-2024" },
+            { name: "San Basilio (Return)", lat: 26.5294, lng: -111.4044, day: "Day 14", date: "01-05-2025" },
+            { name: "Loreto (Return)", lat: 26.0118, lng: -111.3436, day: "Day 15", date: "02-05-2025" },
+            { name: "Corredor (Return)", lat: 25.4181, lng: -110.9062, day: "Day 16", date: "03-05-2025" },
+            { name: "Isla San José (Return)", lat: 24.9589, lng: -110.6222, day: "Day 17", date: "04-05-2025" },
+            { name: "Punta Cosme", lat: 24.3210, lng: -110.5090, day: "Day 18", date: "05-05-2025" },
+            { name: "San Juan de la Costa", lat: 24.4050, lng: -110.4790, day: "Day 19", date: "06-05-2025" },
+            { name: "La Paz (Final)", lat: 24.1500, lng: -110.3000, day: "Day 20", date: "07-05-2025" }
         ];
-
         // Create location and sampling layers
         const locationLayer = L.layerGroup();
         const samplingLayer = L.layerGroup();
@@ -94,7 +131,7 @@
         locationLayer.addTo(map);
 
         // Load Sampling Sites GeoJSON
-       fetch("./www/sampling_sites.geojson")
+        fetch("./www/sampling_sites.geojson")
     .then(response => {
         if (!response.ok) {
             throw new Error(`HTTP error! Status: ${response.status}`);
@@ -102,18 +139,34 @@
         return response.json();
     })
     .then(data => {
-        console.log("✅ Sampling Sites Loaded:", data); // Debugging output
+        console.log("✅ Sampling Sites Loaded:", data);
 
-        const samplingIcon = L.icon({
-            iconUrl: 'https://upload.wikimedia.org/wikipedia/commons/e/ec/RedDot.svg',
-            iconSize: [12, 12],
-            iconAnchor: [6, 6]
+        const reefIcon = L.icon({
+            iconUrl: 'www/reef_icon.png', // Ensure this file exists
+            iconSize: [20, 20], 
+            iconAnchor: [10, 10]
+        });
+
+        const sargassumIcon = L.icon({
+            iconUrl: 'www/sargassum_icon.png', // Ensure this file exists
+            iconSize: [20, 20], 
+            iconAnchor: [10, 10]
         });
 
         const geojsonLayer = L.geoJSON(data, {
-            pointToLayer: (feature, latlng) => L.marker(latlng, { icon: samplingIcon }),
+            pointToLayer: (feature, latlng) => {
+                const type = feature.properties.Type || "Reef"; // Default to Reef if Type is missing
+                const icon = type === "Sargassum" ? reefIcon : sargassumIcon;
+                return L.marker(latlng, { icon });
+            },
             onEachFeature: (feature, layer) => {
-                layer.bindPopup(`<strong>${feature.properties.name}</strong>`);
+                const name = feature.properties.Site || "Unnamed Sampling Site"; // Get name from "Site" column
+                const type = feature.properties.Type || "Unknown";
+                layer.bindPopup(`
+                    <strong>${name}</strong><br>
+                    Type: ${type}<br>
+                    Coordinates: (${feature.geometry.coordinates[1].toFixed(6)}, ${feature.geometry.coordinates[0].toFixed(6)})
+                `);
             }
         });
 
