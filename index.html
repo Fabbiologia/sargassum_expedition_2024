@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Interactive Expedition Planner</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <style>
+        #map {
+            height: 600px;
+        }
+        table {
+            margin-top: 10px;
+            border-collapse: collapse;
+            width: 100%;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <h1>Interactive Expedition Planner: La Paz Loop</h1>
+    <div id="map"></div>
+    <h2>Schedule</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Location</th>
+                <th>Latitude</th>
+                <th>Longitude</th>
+                <th>Date</th>
+                <th>Distance to Next Location (km)</th>
+            </tr>
+        </thead>
+        <tbody id="schedule"></tbody>
+    </table>
+    <p id="total-distance" style="font-weight: bold;"></p>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+        // Initialize the map
+        const map = L.map('map').setView([24.15, -110.3], 8);
+
+        // Add OpenStreetMap tiles
+        const baseLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 18,
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(map);
+
+        // Define expedition locations
+        const locations = [
+            { name: "La Paz", lat: 24.1500, lng: -110.3000, date: "Day 1" },
+            { name: "Isla San José", lat: 24.9589, lng: -110.6222, date: "Day 2-3" },
+            { name: "Corredor", lat: 25.4181, lng: -110.9062, date: "Day 4" },
+            { name: "Loreto", lat: 26.0118, lng: -111.3436, date: "Day 5-6" },
+            { name: "San Basilio", lat: 26.5294, lng: -111.4044, date: "Day 7" },
+            { name: "Bahía Concepción", lat: 26.6979, lng: -111.8124, date: "Day 8-9" },
+            { name: "Santa Rosalia", lat: 27.3400, lng: -112.2600, date: "Day 10-11" },
+            { name: "Isla Tortuga", lat: 27.4833, lng: -111.9333, date: "Day 13" },
+            { name: "San Basilio (Return)", lat: 26.5294, lng: -111.4044, date: "Day 14" },
+            { name: "Loreto (Return)", lat: 26.0118, lng: -111.3436, date: "Day 15" },
+            { name: "Corredor (Return)", lat: 25.4181, lng: -110.9062, date: "Day 16" },
+            { name: "Isla San José (Return)", lat: 24.9589, lng: -110.6222, date: "Day 17" },
+            { name: "Punta Cosme", lat: 24.3210, lng: -110.5090, date: "Day 18" },
+            { name: "San Juan de la Costa", lat: 24.4050, lng: -110.4790, date: "Day 19" },
+            { name: "La Paz (Final)", lat: 24.1500, lng: -110.3000, date: "Day 20" }
+        ];
+
+        // Create location and sampling layers
+        const locationLayer = L.layerGroup();
+        const samplingLayer = L.layerGroup();
+        const polylineLayer = L.layerGroup().addTo(map);
+
+        // Add draggable markers for expedition locations
+        locations.forEach((loc) => {
+            const marker = L.marker([loc.lat, loc.lng], { draggable: true })
+                .addTo(locationLayer)
+                .bindPopup(`<strong>${loc.name}</strong><br>Planned Date: ${loc.date}`);
+
+            // Update marker location on dragend
+            marker.on('dragend', (e) => {
+                const newLatLng = e.target.getLatLng();
+                loc.lat = newLatLng.lat;
+                loc.lng = newLatLng.lng;
+                console.log(`Updated Location: ${loc.name}, Latitude: ${loc.lat}, Longitude: ${loc.lng}`);
+                updateScheduleTable();
+            });
+        });
+
+        locationLayer.addTo(map);
+
+        // Load Sampling Sites GeoJSON
+       fetch("./www/sampling_sites.geojson")
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        return response.json();
+    })
+    .then(data => {
+        console.log("✅ Sampling Sites Loaded:", data); // Debugging output
+
+        const samplingIcon = L.icon({
+            iconUrl: 'https://upload.wikimedia.org/wikipedia/commons/e/ec/RedDot.svg',
+            iconSize: [12, 12],
+            iconAnchor: [6, 6]
+        });
+
+        const geojsonLayer = L.geoJSON(data, {
+            pointToLayer: (feature, latlng) => L.marker(latlng, { icon: samplingIcon }),
+            onEachFeature: (feature, layer) => {
+                layer.bindPopup(`<strong>${feature.properties.name}</strong>`);
+            }
+        });
+
+        samplingLayer.addLayer(geojsonLayer);
+        samplingLayer.addTo(map);
+    })
+    .catch(error => {
+        console.error("❌ Error loading sampling sites GeoJSON:", error);
+        alert("⚠️ Error loading sampling sites. Check the console for details.");
+    });
+
+        // Add layer control
+        L.control.layers(null, {
+            "Locations": locationLayer,
+            "Sampling Sites": samplingLayer
+        }).addTo(map);
+
+        // Update schedule table dynamically
+        const scheduleBody = document.getElementById('schedule');
+        const totalDistanceElement = document.getElementById('total-distance');
+
+        function updateScheduleTable() {
+            scheduleBody.innerHTML = "";
+            polylineLayer.clearLayers();
+            let totalDistance = 0;
+
+            for (let i = 0; i < locations.length; i++) {
+                const loc = locations[i];
+                let distanceToNext = 0;
+
+                if (i < locations.length - 1) {
+                    const nextLoc = locations[i + 1];
+                    distanceToNext = (map.distance([loc.lat, loc.lng], [nextLoc.lat, nextLoc.lng]) / 1000).toFixed(2);
+                    totalDistance += parseFloat(distanceToNext);
+
+                    // Draw a new polyline and clear the old one
+                    L.polyline([[loc.lat, loc.lng], [nextLoc.lat, nextLoc.lng]], { color: 'blue' }).addTo(polylineLayer);
+                }
+
+                // Add a row to the schedule table
+                scheduleBody.innerHTML += `
+                    <tr>
+                        <td>${loc.name}</td>
+                        <td>${loc.lat.toFixed(6)}</td>
+                        <td>${loc.lng.toFixed(6)}</td>
+                        <td>${loc.date}</td>
+                        <td>${distanceToNext > 0 ? distanceToNext + " km" : "Final Location"}</td>
+                    </tr>
+                `;
+            }
+
+            totalDistanceElement.innerHTML = `Total Distance Covered: ${totalDistance.toFixed(2)} km`;
+        }
+
+        updateScheduleTable();
+    </script>
+</body>
+</html>
