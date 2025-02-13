@@ -1,227 +1,225 @@
-<!DOCTYPE html>
 <html>
 <head>
-    <title>Interactive Expedition Planner</title>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    <style>
-        #map {
-            height: 600px;
-        }
-        table {
-            margin-top: 10px;
-            border-collapse: collapse;
-            width: 100%;
-        }
-        th, td {
-            border: 1px solid #ddd;
-            padding: 8px;
-        }
-        th {
-            background-color: #f2f2f2;
-        }
-    </style>
+  <title>Interactive Expedition Planner: Sargassum and Climate Change Impacts in the Gulf of California</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      background-color: #f8f8f8;
+      padding: 20px;
+      text-align: center;
+      border-bottom: 1px solid #ddd;
+    }
+    nav {
+      background-color: #333;
+      overflow: hidden;
+    }
+    nav a {
+      float: left;
+      display: block;
+      color: #fff;
+      text-align: center;
+      padding: 14px 16px;
+      text-decoration: none;
+    }
+    nav a:hover {
+      background-color: #ddd;
+      color: #000;
+    }
+    .container {
+      padding: 20px;
+    }
+    section {
+      margin-bottom: 40px;
+    }
+    #map {
+      height: 600px;
+      width: 100%;
+      margin-bottom: 20px;
+    }
+    table {
+      margin-top: 10px;
+      border-collapse: collapse;
+      width: 100%;
+    }
+    th, td {
+      border: 1px solid #ddd;
+      padding: 8px;
+    }
+    th {
+      background-color: #f2f2f2;
+    }
+    .overview {
+      line-height: 1.6;
+    }
+  </style>
 </head>
 <body>
-    <h1>Interactive Expedition Planner: La Paz Loop</h1>
-    <div id="map"></div>
-    <h2>Schedule</h2>
-    <table>
+  <header>
+    <h1>Interactive Expedition Planner</h1>
+    <h2>Sargassum and Climate Change Impacts in the Gulf of California</h2>
+    <p>April 19 – May 7, 2025</p>
+  </header>
+  <nav>
+    <a href="#interactive-map">Interactive Map & Schedule</a>
+    <a href="#expedition-overview">Expedition Overview</a>
+  </nav>
+  <div class="container">
+    <section id="interactive-map">
+      <h2>Interactive Map & Schedule</h2>
+      <div id="map"></div>
+      <h3>Expedition Schedule</h3>
+      <table>
         <thead>
-            <tr>
-                <th>Location</th>
-                <th>Latitude</th>
-                <th>Longitude</th>
-                <th>Date</th>
-                <th>Distance to Next Location (km)</th>
-            </tr>
+          <tr>
+            <th>Location</th>
+            <th>Latitude</th>
+            <th>Longitude</th>
+            <th>Date</th>
+            <th>Calculated Distance to Next Location</th>
+          </tr>
         </thead>
         <tbody id="schedule"></tbody>
-    </table>
-    <p id="total-distance" style="font-weight: bold;"></p>
-    <img src="./www/sargassum.png" alt="Image Description">
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    <script>
-        // Initialize the map
-        const map = L.map('map').setView([24.15, -110.3], 8);
+      </table>
+      <p id="total-distance" style="font-weight: bold;"></p>
+    </section>
+    <section id="expedition-overview">
+      <h2>Expedition Overview</h2>
+      <div class="overview">
+        <h3>Introduction and Background</h3>
+        <p>
+          Rising ocean temperatures and an increased frequency of marine heatwaves have accelerated the tropicalization of coastal ecosystems in the Gulf of California. This expedition reassesses sargassum habitats—critical nursery areas for reef fishes—by integrating traditional underwater surveys with advanced AI-based image analysis, thereby building on previous studies to enhance marine conservation and adaptive fisheries policies.
+        </p>
+        <h3>Objectives</h3>
+        <ul>
+          <li>Document long‐term changes in sargassum biomass, coverage, and structure across diverse coastal habitats.</li>
+          <li>Evaluate the impacts on reef fish recruitment, including species of commercial significance.</li>
+          <li>Compare current field observations with historical datasets to separate climate-induced changes from other pressures.</li>
+          <li>Implement AI-based methods for enhanced detection and classification of fish recruits from underwater imagery.</li>
+          <li>Provide robust data to inform conservation strategies and regulatory frameworks.</li>
+        </ul>
+        <h3>Methodology</h3>
+        <p>
+          The expedition employs four workstreams: underwater visual censuses along fixed transects, sargassum biomass and habitat assessments using quadrats and transects, AI-based analysis of underwater imagery for fish recruit identification, and integrated data analysis using multivariate statistical techniques.
+        </p>
+        <h3>Field Logistics and Safety Protocols</h3>
+        <p>
+          Scheduled from April 19 to May 7, 2025, the expedition utilizes SCUBA gear, underwater cameras, quadrats, GPS devices, data loggers, and ruggedized tablets for real-time data entry. All operations adhere to strict safety standards, with contingency plans in place to accommodate changing weather or sea conditions.
+        </p>
+        <h3>Team Composition</h3>
+        <p>
+          The interdisciplinary team of eleven researchers includes designated field team leaders responsible for dive operations and overall site coordination, with specialized teams for underwater visual census, sargassum assessments, and AI-based data analysis.
+        </p>
+        <h3>Contingency and Safety Considerations</h3>
+        <p>
+          A comprehensive risk management plan addresses weather variability, equipment backups, and emergency protocols to ensure the safety and operational efficiency of all team members.
+        </p>
+        <h3>Planned Itinerary and Distance</h3>
+        <p>
+          The planned itinerary covers a total distance of 885.24 km, with scheduled stops at La Paz, Isla San José, Corredor, Loreto, San Basilio, Bahía Concepción, Santa Rosalia, Isla Tortuga, and designated return legs. The schedule is designed to optimize field data collection and logistic efficiency.
+        </p>
+      </div>
+    </section>
+  </div>
+  <!-- Leaflet JS -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script>
+    // Initialize the map
+    const map = L.map('map').setView([24.15, -110.3], 8);
+// Define tile layers
+const osmLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  maxZoom: 19,
+  attribution: '© OpenStreetMap'
+});
 
-        // Define the default tile layer (OpenStreetMap)
-        const osmLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            maxZoom: 19,
-            attribution: '© OpenStreetMap'
-        });
+const satelliteLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+  maxZoom: 18,
+  attribution: 'Tiles © Esri'
+});
 
-        // Define the satellite tile layer (Esri)
-        const satelliteLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-            maxZoom: 18,
-            attribution: 'Tiles © Esri'
-        });
+// Add default layer
+osmLayer.addTo(map);
 
-        // Create a layer control to switch between layers
-        const baseMaps = {
-            "OpenStreetMap": osmLayer,
-            "Satellite": satelliteLayer
-        };
+// Base maps control
+const baseMaps = {
+  "OpenStreetMap": osmLayer,
+  "Satellite": satelliteLayer
+};
+L.control.layers(baseMaps).addTo(map);
 
-        // Add the default layer to the map
-        osmLayer.addTo(map);
+// Layers for locations and polylines
+const locationLayer = L.layerGroup().addTo(map);
+const polylineLayer = L.layerGroup().addTo(map);
 
-        // Add the layer control to the map
-        L.control.layers(baseMaps).addTo(map);
+// Define expedition locations (Punta Cosme removed; updated San Juan de la Costa coordinates)
+const locations = [
+  { name: "La Paz", lat: 24.15, lng: -110.3, date: "19-04-2025" },
+  { name: "Isla San José", lat: 24.9589, lng: -110.622, date: "20-04-2025 / 21-04-2025" },
+  { name: "Corredor", lat: 25.4181, lng: -110.906, date: "22-04-2025" },
+  { name: "Loreto", lat: 26.0118, lng: -111.344, date: "23-04-2025 / 24-04-2025" },
+  { name: "San Basilio", lat: 26.5294, lng: -111.404, date: "25-04-2025" },
+  { name: "Bahía Concepción", lat: 26.6979, lng: -111.812, date: "26-04-2025 / 27-04-2025" },
+  { name: "Santa Rosalia", lat: 27.34, lng: -112.26, date: "28-04-2025 / 29-04-2025" },
+  { name: "Isla Tortuga", lat: 27.4833, lng: -111.933, date: "30-04-2025" },
+  { name: "San Basilio (Return)", lat: 26.5294, lng: -111.404, date: "01-05-2025" },
+  { name: "Loreto (Return)", lat: 26.0118, lng: -111.344, date: "02-05-2025" },
+  { name: "Corredor (Return)", lat: 25.4181, lng: -110.906, date: "03-05-2025" },
+  { name: "Isla San José (Return)", lat: 24.9589, lng: -110.622, date: "04-05-2025" },
+  { name: "San Juan de la Costa", lat: 24.317065, lng: -110.648804, date: "06-05-2025" },
+  { name: "La Paz (Final)", lat: 24.15, lng: -110.3, date: "07-05-2025" }
+];
 
-        // Ensure only one layer is visible at a time
-        map.on('overlayadd', function(e) {
-            if (e.layer === satelliteLayer) {
-                map.removeLayer(osmLayer);
-            }
-        });
+// Add draggable markers for each location
+locations.forEach(loc => {
+  const marker = L.marker([loc.lat, loc.lng], { draggable: true })
+    .addTo(locationLayer)
+    .bindPopup(`<strong>${loc.name}</strong><br>Planned Date: ${loc.date}`);
+  
+  marker.on('dragend', function(e) {
+    const newPos = e.target.getLatLng();
+    loc.lat = newPos.lat;
+    loc.lng = newPos.lng;
+    updateScheduleTable();
+  });
+});
 
-        map.on('overlayremove', function(e) {
-            if (e.layer === satelliteLayer) {
-                map.addLayer(osmLayer);
-            }
-        });
+// Update the schedule table dynamically
+function updateScheduleTable() {
+  const scheduleBody = document.getElementById('schedule');
+  scheduleBody.innerHTML = "";
+  polylineLayer.clearLayers();
+  let totalDistance = 0;
+  
+  for (let i = 0; i < locations.length; i++) {
+    const currentLoc = locations[i];
+    let distanceToNext = 0;
+    if (i < locations.length - 1) {
+      const nextLoc = locations[i + 1];
+      distanceToNext = (map.distance([currentLoc.lat, currentLoc.lng], [nextLoc.lat, nextLoc.lng]) / 1000).toFixed(2);
+      totalDistance += parseFloat(distanceToNext);
+      L.polyline([[currentLoc.lat, currentLoc.lng], [nextLoc.lat, nextLoc.lng]], { color: 'blue' }).addTo(polylineLayer);
+    }
+    scheduleBody.innerHTML += `
+      <tr>
+        <td>${currentLoc.name}</td>
+        <td>${currentLoc.lat.toFixed(6)}</td>
+        <td>${currentLoc.lng.toFixed(6)}</td>
+        <td>${currentLoc.date}</td>
+        <td>${distanceToNext > 0 ? distanceToNext + " km" : "Final Location"}</td>
+      </tr>
+    `;
+  }
+  document.getElementById('total-distance').innerHTML = `Total Calculated Distance: ${totalDistance.toFixed(2)} km`;
+}
 
-        // Optionally, you can use a satellite layer from Mapbox
-        // L.tileLayer('https://api.mapbox.com/styles/v1/{username}/{style_id}/tiles/{z}/{x}/{y}?access_token={your_access_token}', {
-        //     maxZoom: 18,
-        //     attribution: '© Mapbox © OpenStreetMap'
-        // }).addTo(map);
-
-        // Define expedition locations
-        const locations = [
-            { name: "La Paz", lat: 24.1500, lng: -110.3000, day: "Day 1", date: "19-04-2025" },
-            { name: "Isla San José", lat: 24.9589, lng: -110.6222, day: "Day 2-3", date: "20-04-2025 / 21-04-2025" },
-            { name: "Corredor", lat: 25.4181, lng: -110.9062, day: "Day 4", date: "22-04-2024" },
-            { name: "Loreto", lat: 26.0118, lng: -111.3436, day: "Day 5-6", date: "23-04-2024 / 24-04-2024" },
-            { name: "San Basilio", lat: 26.5294, lng: -111.4044, day: "Day 7", date: "25-04-2024" },
-            { name: "Bahía Concepción", lat: 26.6979, lng: -111.8124, day: "Day 8-9", date: "26-04-2024 / 27-04-2024" },
-            { name: "Santa Rosalia", lat: 27.3400, lng: -112.2600, day: "Day 10-11", date: "28-04-2024 / 29-04-2024" },
-            { name: "Isla Tortuga", lat: 27.4833, lng: -111.9333, day: "Day 13", date: "30-04-2024" },
-            { name: "San Basilio (Return)", lat: 26.5294, lng: -111.4044, day: "Day 14", date: "01-05-2025" },
-            { name: "Loreto (Return)", lat: 26.0118, lng: -111.3436, day: "Day 15", date: "02-05-2025" },
-            { name: "Corredor (Return)", lat: 25.4181, lng: -110.9062, day: "Day 16", date: "03-05-2025" },
-            { name: "Isla San José (Return)", lat: 24.9589, lng: -110.6222, day: "Day 17", date: "04-05-2025" },
-            { name: "Punta Cosme", lat: 24.3210, lng: -110.5090, day: "Day 18", date: "05-05-2025" },
-            { name: "San Juan de la Costa", lat: 24.4050, lng: -110.4790, day: "Day 19", date: "06-05-2025" },
-            { name: "La Paz (Final)", lat: 24.1500, lng: -110.3000, day: "Day 20", date: "07-05-2025" }
-        ];
-        // Create location and sampling layers
-        const locationLayer = L.layerGroup();
-        const samplingLayer = L.layerGroup();
-        const polylineLayer = L.layerGroup().addTo(map);
-
-        // Add draggable markers for expedition locations
-        locations.forEach((loc) => {
-            const marker = L.marker([loc.lat, loc.lng], { draggable: true })
-                .addTo(locationLayer)
-                .bindPopup(`<strong>${loc.name}</strong><br>Planned Date: ${loc.date}`);
-
-            // Update marker location on dragend
-            marker.on('dragend', (e) => {
-                const newLatLng = e.target.getLatLng();
-                loc.lat = newLatLng.lat;
-                loc.lng = newLatLng.lng;
-                console.log(`Updated Location: ${loc.name}, Latitude: ${loc.lat}, Longitude: ${loc.lng}`);
-                updateScheduleTable();
-            });
-        });
-
-        locationLayer.addTo(map);
-
-        // Load Sampling Sites GeoJSON
-        fetch("./www/sampling_sites.geojson")
-    .then(response => {
-        if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-        return response.json();
-    })
-    .then(data => {
-        console.log("✅ Sampling Sites Loaded:", data);
-
-        const reefIcon = L.icon({
-            iconUrl: 'www/reef_icon.png', // Ensure this file exists
-            iconSize: [20, 20], 
-            iconAnchor: [10, 10]
-        });
-
-        const sargassumIcon = L.icon({
-            iconUrl: 'www/sargassum_icon.png', // Ensure this file exists
-            iconSize: [20, 20], 
-            iconAnchor: [10, 10]
-        });
-
-        const geojsonLayer = L.geoJSON(data, {
-            pointToLayer: (feature, latlng) => {
-                const type = feature.properties.Type || "Reef"; // Default to Reef if Type is missing
-                const icon = type === "Sargassum" ? reefIcon : sargassumIcon;
-                return L.marker(latlng, { icon });
-            },
-            onEachFeature: (feature, layer) => {
-                const name = feature.properties.Site || "Unnamed Sampling Site"; // Get name from "Site" column
-                const type = feature.properties.Type || "Unknown";
-                layer.bindPopup(`
-                    <strong>${name}</strong><br>
-                    Type: ${type}<br>
-                    Coordinates: (${feature.geometry.coordinates[1].toFixed(6)}, ${feature.geometry.coordinates[0].toFixed(6)})
-                `);
-            }
-        });
-
-        samplingLayer.addLayer(geojsonLayer);
-        samplingLayer.addTo(map);
-    })
-    .catch(error => {
-        console.error("❌ Error loading sampling sites GeoJSON:", error);
-        alert("⚠️ Error loading sampling sites. Check the console for details.");
-    });
-
-        // Add layer control
-        L.control.layers(null, {
-            "Locations": locationLayer,
-            "Sampling Sites": samplingLayer
-        }).addTo(map);
-
-        // Update schedule table dynamically
-        const scheduleBody = document.getElementById('schedule');
-        const totalDistanceElement = document.getElementById('total-distance');
-
-        function updateScheduleTable() {
-            scheduleBody.innerHTML = "";
-            polylineLayer.clearLayers();
-            let totalDistance = 0;
-
-            for (let i = 0; i < locations.length; i++) {
-                const loc = locations[i];
-                let distanceToNext = 0;
-
-                if (i < locations.length - 1) {
-                    const nextLoc = locations[i + 1];
-                    distanceToNext = (map.distance([loc.lat, loc.lng], [nextLoc.lat, nextLoc.lng]) / 1000).toFixed(2);
-                    totalDistance += parseFloat(distanceToNext);
-
-                    // Draw a new polyline and clear the old one
-                    L.polyline([[loc.lat, loc.lng], [nextLoc.lat, nextLoc.lng]], { color: 'blue' }).addTo(polylineLayer);
-                }
-
-                // Add a row to the schedule table
-                scheduleBody.innerHTML += `
-                    <tr>
-                        <td>${loc.name}</td>
-                        <td>${loc.lat.toFixed(6)}</td>
-                        <td>${loc.lng.toFixed(6)}</td>
-                        <td>${loc.date}</td>
-                        <td>${distanceToNext > 0 ? distanceToNext + " km" : "Final Location"}</td>
-                    </tr>
-                `;
-            }
-
-            totalDistanceElement.innerHTML = `Total Distance Covered: ${totalDistance.toFixed(2)} km`;
-        }
-
-        updateScheduleTable();
-    </script>
+updateScheduleTable();
+ </script>
 </body>
 </html>
